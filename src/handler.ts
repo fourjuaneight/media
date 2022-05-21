@@ -1,4 +1,4 @@
-import { bookGenres, mediaGenres, gameGenres, gamePlatforms } from './tags';
+import { bookGenres, gameGenres, gamePlatforms, videoGenres} from './tags';
 import {
   addMediaItem,
   queryMediaItems,
@@ -32,9 +32,9 @@ const noAuthReqBody = {
 // match tags list to array of tags
 const tagsList: { [key: string]: string[] } = {
   bookGenres,
-  mediaGenres,
   gameGenres,
   gamePlatforms,
+  videoGenres,
 };
 
 const missingData = (data: MediaItem | undefined): boolean => {

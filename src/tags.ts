@@ -12,20 +12,6 @@ export const bookGenres = [
   'technology',
 ];
 
-export const mediaGenres = [
-  'action',
-  'adventure',
-  'anime',
-  'comedy',
-  'documentary',
-  'drama',
-  'fantasy',
-  'horror',
-  'romance',
-  'sci-fi',
-  'thriller',
-];
-
 export const gameGenres = [
   'action',
   'adventure',
@@ -58,4 +44,18 @@ export const gamePlatforms = [
   'Wii',
   'Wii U',
   'Xbox',
+];
+
+export const videoGenres = [
+  'action',
+  'adventure',
+  'anime',
+  'comedy',
+  'documentary',
+  'drama',
+  'fantasy',
+  'horror',
+  'romance',
+  'sci-fi',
+  'thriller',
 ];
