@@ -7,9 +7,10 @@ import {
 } from './typings.d';
 
 const MEDIA_FIELDS = {
-  book: ['author', 'genre', 'title'],
-  game: ['genre', 'platform', 'studio', 'title'],
-  video: ['director', 'genre', 'title'],
+  books: ['author', 'genre', 'title'],
+  games: ['genre', 'platform', 'studio', 'title'],
+  movies: ['director', 'genre', 'title'],
+  shows: ['director', 'genre', 'title'],
 };
 
 const objToQueryString = (obj: { [key: string]: any }) =>
@@ -136,9 +137,6 @@ export const updateMediaItem = async (
  * @returns {Promise<MediaItem[]>}
  */
 export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
-  console.log(MEDIA_FIELDS);
-  console.log(MEDIA_FIELDS[table]);
-  console.log(MEDIA_FIELDS[table].join('\n'));
   const query = `
     {
       media_${table}(order_by: {name: asc}) {
@@ -146,7 +144,7 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
       }
     }
   `;
-    console.log(query);
+
   try {
     const request = await fetch(`${HASURA_ENDPOINT}`, {
       method: 'POST',
@@ -156,7 +154,6 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
       },
       body: JSON.stringify({ query }),
     });
-    console.log(request);
     const response: HasuraQueryResp | HasuraErrors = await request.json();
 
     if (response.errors) {
