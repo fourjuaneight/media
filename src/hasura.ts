@@ -154,18 +154,14 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw new Error(
-        `Querying records from Hasura - Media - ${table}: \n ${errors
+      throw `Querying records from Hasura - Media - ${table}: \n ${errors
           .map(err => `${err.extensions.path}: ${err.message}`)
-          .join('\n')} \n ${query}`
-      );
+          .join('\n')} \n ${query}`;
     }
 
     return (response as HasuraQueryResp).data[`media_${table}`];
   } catch (error) {
-    throw new Error(
-      `Querying records from Hasura - Media - ${table}: \n ${error}`
-    );
+    throw `Querying records from Hasura - Media - ${table}: \n ${error}`;
   }
 };
 
@@ -207,17 +203,13 @@ export const searchMediaItems = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw new Error(
-        `Searching records from Hasura - Media - ${table}: \n ${errors
+      throw `Searching records from Hasura - Media - ${table}: \n ${errors
           .map(err => `${err.extensions.path}: ${err.message}`)
-          .join('\n')} \n ${query}`
-      );
+          .join('\n')} \n ${query}`;
     }
 
     return (response as HasuraQueryResp).data[`media_${table}`];
   } catch (error) {
-    throw new Error(
-      `Searching records from Hasura - Media - ${table}: \n ${error}`
-    );
+    throw `Searching records from Hasura - Media - ${table}: \n ${error}`;
   }
 };
