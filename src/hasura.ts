@@ -136,6 +136,9 @@ export const updateMediaItem = async (
  * @returns {Promise<MediaItem[]>}
  */
 export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
+  console.log(MEDIA_FIELDS);
+  console.log(MEDIA_FIELDS[table]);
+  console.log(MEDIA_FIELDS[table].join('\n'));
   const query = `
     {
       media_${table}(order_by: {name: asc}) {
@@ -143,7 +146,7 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
       }
     }
   `;
-
+    console.log(query);
   try {
     const request = await fetch(`${HASURA_ENDPOINT}`, {
       method: 'POST',
@@ -153,8 +156,9 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
       },
       body: JSON.stringify({ query }),
     });
+    console.log(request);
     const response: HasuraQueryResp | HasuraErrors = await request.json();
-    console.log(response);
+
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 

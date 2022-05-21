@@ -64,7 +64,7 @@ const missingData = (data: MediaItem | undefined): boolean => {
  */
 const handleAction = async (payload: RequestPayload): Promise<Response> => {
   const { table, type } = payload;
-  console.log(payload);
+
   try {
     // determine which type and method to use
     switch (true) {
@@ -121,7 +121,6 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         );
         break;
       default: {
-        console.log(table, type);
         const queryItems = await queryMediaItems(table);
 
         return new Response(
