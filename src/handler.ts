@@ -82,12 +82,11 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
       }
       case payload.type === 'Insert':
         const insertData = payload.data as MediaItem;
-
-        await addMediaItem(table, insertData);
+        const saved = await addMediaItem(table, insertData);
 
         return new Response(
           JSON.stringify({
-            saved: data.name,
+            saved,
             table,
             location: type,
           }),
@@ -97,11 +96,11 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
       case payload.type === 'Update':
         const updateData = payload.data as MediaItem;
 
-        await updateMediaItem(table, updateData.id as string, updateData);
+        const updated = await updateMediaItem(table, updateData.id as string, updateData);
 
         return new Response(
           JSON.stringify({
-            updated: data.name,
+            updated,
             table,
             location: type,
           }),
