@@ -60,7 +60,7 @@ export const addMediaItem = async (
       body: JSON.stringify({ query }),
     });
     const response: HasuraInsertResp | HasuraErrors = await request.json();
-    console.log(response);
+
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
@@ -69,7 +69,7 @@ export const addMediaItem = async (
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
-    console.log((response as HasuraInsertResp).data);
+
     return (response as HasuraInsertResp).data[`insert_media_${table}_one`].title;
   } catch (error) {
     console.log(error);
