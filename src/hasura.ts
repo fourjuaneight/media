@@ -45,7 +45,7 @@ export const addMediaItem = async (
   const query = `
     mutation {
       insert_media_${table}_one(object: { ${objToQueryString(item)} }) {
-        name
+        title
       }
     }
   `;
@@ -97,7 +97,7 @@ export const updateMediaItem = async (
         _set: { ${objToQueryString(item)} }
       ) {
         returning {
-          name
+          title
         }
       }
     }
@@ -139,7 +139,7 @@ export const updateMediaItem = async (
 export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
   const query = `
     {
-      media_${table}(order_by: {name: asc}) {
+      media_${table}(order_by: {title: asc}) {
         ${MEDIA_FIELDS[table].join('\n')}
       }
     }
@@ -178,18 +178,18 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
  * @async
  *
  * @param {string} table
- * @param {string} term media item name
+ * @param {string} pattern media item title
  * @returns {Promise<MediaItem[]>}
  */
 export const searchMediaItems = async (
   table: string,
-  patter: string
+  pattern: string
 ): Promise<MediaItem[]> => {
   const query = `
     {
       media_${table}(
-        order_by: {name: asc},
-        where: {name: {_iregex: ".*${patter}.*"}}
+        order_by: {title: asc},
+        where: {title: {_iregex: ".*${pattern}.*"}}
       ) {
         ${MEDIA_FIELDS[table].join('\n')}
       }
