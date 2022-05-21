@@ -63,11 +63,13 @@ export const addMediaItem = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
+      console.log(errors);
       throw `Adding record to Hasura - Media - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
   } catch (error) {
+    console.log(error);
     throw `Adding record to Hasura - Media - ${table}: \n ${error}`;
   }
 };
@@ -114,11 +116,13 @@ export const updateMediaItem = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
+      console.log(errors);
       throw `Updating record to Hasura - Media - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
   } catch (error) {
+    console.log(error);
     throw `Updating record to Hasura - Media - ${table}: \n ${error}`;
   }
 };
@@ -154,6 +158,7 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
+      console.log(errors);
       throw `Querying records from Hasura - Media - ${table}: \n ${errors
           .map(err => `${err.extensions.path}: ${err.message}`)
           .join('\n')} \n ${query}`;
@@ -161,6 +166,7 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
 
     return (response as HasuraQueryResp).data[`media_${table}`];
   } catch (error) {
+    console.log(error);
     throw `Querying records from Hasura - Media - ${table}: \n ${error}`;
   }
 };
@@ -203,6 +209,7 @@ export const searchMediaItems = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
+      console.log(errors);
       throw `Searching records from Hasura - Media - ${table}: \n ${errors
           .map(err => `${err.extensions.path}: ${err.message}`)
           .join('\n')} \n ${query}`;
@@ -210,6 +217,7 @@ export const searchMediaItems = async (
 
     return (response as HasuraQueryResp).data[`media_${table}`];
   } catch (error) {
+    console.log(error);
     throw `Searching records from Hasura - Media - ${table}: \n ${error}`;
   }
 };
