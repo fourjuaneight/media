@@ -95,7 +95,6 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         break;
       case payload.type === 'Update':
         const updateData = payload.data as MediaItem;
-
         const updated = await updateMediaItem(table, updateData.id as string, updateData);
 
         return new Response(
