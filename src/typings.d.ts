@@ -56,6 +56,7 @@ export interface HasuraErrors {
 export interface RequestPayload {
   key: string;
   type: string;
+  table: string;
   tagList?: string;
   data?: ShelfItem;
   query?: string;
