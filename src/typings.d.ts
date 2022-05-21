@@ -14,12 +14,14 @@ export interface Game {
   title: string;
 }
 
-export interface Media {
+export interface Video {
   director: string;
   genre: string;
   id?: string;
   title: string;
 }
+
+export type MediaItem = Book | Game | Video;
 
 export interface HasuraInsertResp {
   [key: string]: {
@@ -35,27 +37,9 @@ export interface HasuraUpdateResp {
   };
 }
 
-export interface HasuraQueryBooksResp {
+export interface HasuraQueryResp {
   data: {
-    media_books: Book[];
-  };
-}
-
-export interface HasuraQueryGamesResp {
-  data: {
-    media_games: Game[];
-  };
-}
-
-export interface HasuraQueryMoviesResp {
-  data: {
-    media_movies: Media[];
-  };
-}
-
-export interface HasuraQueryShowsResp {
-  data: {
-    media_shows: Media[];
+    [key: string]: MediaItem[];
   };
 }
 
