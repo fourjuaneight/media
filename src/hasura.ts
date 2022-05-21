@@ -158,16 +158,16 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      console.log(response);
-      console.error(errors);
+      console.log(errors);
       throw `Querying records from Hasura - Media - ${table}: \n ${errors
           .map(err => `${err.extensions.path}: ${err.message}`)
           .join('\n')} \n ${query}`;
     }
 
+    console.log(response);
     return (response as HasuraQueryResp).data[`media_${table}`];
   } catch (error) {
-    console.error(error);
+    console.log(error);
     throw `Querying records from Hasura - Media - ${table}: \n ${error}`;
   }
 };
