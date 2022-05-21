@@ -7,10 +7,10 @@ import {
 } from './typings.d';
 
 const MEDIA_FIELDS = {
-  books: ['author', 'genre', 'title'],
-  games: ['genre', 'platform', 'studio', 'title'],
-  movies: ['director', 'genre', 'title'],
-  shows: ['director', 'genre', 'title'],
+  books: ['title', 'author', 'genre'],
+  games: ['title', 'studio', 'platform', 'genre'],
+  movies: ['title', 'director', 'genre'],
+  shows: ['title', 'director', 'genre'],
 };
 
 const objToQueryString = (obj: { [key: string]: any }) =>
