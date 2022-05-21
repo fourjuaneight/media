@@ -161,7 +161,7 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
       );
     }
 
-    return (response as HasuraQueryResp).data.media_shelf;
+    return (response as HasuraQueryResp).data[`media_${table}`];
   } catch (error) {
     throw new Error(
       `Querying records from Hasura - Media - ${table}: \n ${error}`
@@ -214,7 +214,7 @@ export const searchMediaItems = async (
       );
     }
 
-    return (response as HasuraQueryResp).data.media_shelf;
+    return (response as HasuraQueryResp).data[`media_${table}`];
   } catch (error) {
     throw new Error(
       `Searching records from Hasura - Media - ${table}: \n ${error}`
