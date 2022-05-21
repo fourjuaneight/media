@@ -49,7 +49,6 @@ export const addMediaItem = async (
       }
     }
   `;
-  console.log(query);
 
   try {
     const request = await fetch(`${HASURA_ENDPOINT}`, {
@@ -61,7 +60,7 @@ export const addMediaItem = async (
       body: JSON.stringify({ query }),
     });
     const response: HasuraInsertResp | HasuraErrors = await request.json();
-    console.log(response);
+
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
@@ -70,6 +69,8 @@ export const addMediaItem = async (
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
+
+    return;
   } catch (error) {
     console.log(error);
     throw `Adding record to Hasura - Media - ${table}: \n ${error}`;
@@ -123,6 +124,8 @@ export const updateMediaItem = async (
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
+
+    return;
   } catch (error) {
     console.log(error);
     throw `Updating record to Hasura - Media - ${table}: \n ${error}`;
