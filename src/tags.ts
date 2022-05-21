@@ -1,0 +1,61 @@
+export const book-genres = [
+  'art',
+  'comics',
+  'drama',
+  'guides',
+  'history',
+  'manga',
+  'mystery',
+  'romance',
+  'sci-fi',
+  'science',
+  'technology',
+];
+
+export const media-genres = [
+  'action',
+  'adventure',
+  'anime',
+  'comedy',
+  'documentary',
+  'drama',
+  'fantasy',
+  'horror',
+  'romance',
+  'sci-fi',
+  'thriller',
+];
+
+export const game-genres = [
+  'action',
+  'adventure',
+  'fighting',
+  'horror',
+  'jrpg',
+  'platform',
+  'puzzle',
+  'racing',
+  'roguelike',
+  'rpg',
+  'sandbox',
+  'shooter',
+];
+
+export const game-platforms = [
+  '3DS',
+  'DS', 
+  'GB',
+  'GBC',
+  'GBA',
+  'GameCube',
+  'iOS',
+  'N64',
+  'NES',
+  'PC',
+  'PlayStation',
+  'SNES',
+  'Switch',
+  'Wii',
+  'Wii U', 
+  'Xbox',
+];
