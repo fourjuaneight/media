@@ -1,4 +1,4 @@
-export const book-genres = [
+export const bookGenres = [
   'art',
   'comics',
   'drama',
@@ -12,7 +12,7 @@ export const book-genres = [
   'technology',
 ];
 
-export const media-genres = [
+export const mediaGenres = [
   'action',
   'adventure',
   'anime',
@@ -26,7 +26,7 @@ export const media-genres = [
   'thriller',
 ];
 
-export const game-genres = [
+export const gameGenres = [
   'action',
   'adventure',
   'fighting',
@@ -41,9 +41,9 @@ export const game-genres = [
   'shooter',
 ];
 
-export const game-platforms = [
+export const gamePlatforms = [
   '3DS',
-  'DS', 
+  'DS',
   'GB',
   'GBC',
   'GBA',
@@ -56,6 +56,6 @@ export const game-platforms = [
   'SNES',
   'Switch',
   'Wii',
-  'Wii U', 
+  'Wii U',
   'Xbox',
 ];
