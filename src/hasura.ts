@@ -49,6 +49,7 @@ export const addMediaItem = async (
       }
     }
   `;
+  console.log(query);
 
   try {
     const request = await fetch(`${HASURA_ENDPOINT}`, {
@@ -60,7 +61,7 @@ export const addMediaItem = async (
       body: JSON.stringify({ query }),
     });
     const response: HasuraInsertResp | HasuraErrors = await request.json();
-
+    console.log(response);
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
