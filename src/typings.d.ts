@@ -58,6 +58,6 @@ export interface RequestPayload {
   type: string;
   table: string;
   tagList?: string;
-  data?: ShelfItem;
+  data?: MediaItem;
   query?: string;
 }
