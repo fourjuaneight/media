@@ -70,7 +70,7 @@ export const addMediaItem = async (
         .join('\n')} \n ${query}`;
     }
 
-    return (response as HasuraInsertResp).data[`insert_media_${table}_one`].title;
+    return (response as HasuraInsertResp)[`insert_media_${table}_one`].title;
   } catch (error) {
     console.log(error);
     throw `Adding record to Hasura - Media - ${table}: \n ${error}`;
@@ -125,7 +125,8 @@ export const updateMediaItem = async (
         .join('\n')} \n ${query}`;
     }
 
-    return (response as HasuraInsertResp).data[`update_media_${table}`].title;
+    return (response as HasuraUpdateResp)[`update_media_${table}`].returning[0]
+      .title;
   } catch (error) {
     console.log(error);
     throw `Updating record to Hasura - Media - ${table}: \n ${error}`;
@@ -165,8 +166,8 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
 
       console.log(errors);
       throw `Querying records from Hasura - Media - ${table}: \n ${errors
-          .map(err => `${err.extensions.path}: ${err.message}`)
-          .join('\n')} \n ${query}`;
+        .map(err => `${err.extensions.path}: ${err.message}`)
+        .join('\n')} \n ${query}`;
     }
 
     return (response as HasuraQueryResp).data[`media_${table}`];
@@ -216,8 +217,8 @@ export const searchMediaItems = async (
 
       console.log(errors);
       throw `Searching records from Hasura - Media - ${table}: \n ${errors
-          .map(err => `${err.extensions.path}: ${err.message}`)
-          .join('\n')} \n ${query}`;
+        .map(err => `${err.extensions.path}: ${err.message}`)
+        .join('\n')} \n ${query}`;
     }
 
     return (response as HasuraQueryResp).data[`media_${table}`];
