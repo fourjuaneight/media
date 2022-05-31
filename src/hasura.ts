@@ -30,110 +30,6 @@ const objToQueryString = (obj: { [key: string]: any }) =>
   });
 
 /**
- * Add media entry to Hasura.
- * @function
- * @async
- *
- * @param {string} table
- * @param {MediaItem} item data to upload
- * @returns {Promise<string>}
- */
-export const addMediaItem = async (
-  table: string,
-  item: MediaItem
-): Promise<string> => {
-  const query = `
-    mutation {
-      insert_media_${table}_one(object: { ${objToQueryString(item)} }) {
-        title
-      }
-    }
-  `;
-
-  try {
-    const request = await fetch(`${HASURA_ENDPOINT}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
-      },
-      body: JSON.stringify({ query }),
-    });
-    const response: HasuraInsertResp | HasuraErrors = await request.json();
-
-    if (response.errors) {
-      const { errors } = response as HasuraErrors;
-
-      console.log(errors);
-      throw `Adding record to Hasura - Media - ${table}: \n ${errors
-        .map(err => `${err.extensions.path}: ${err.message}`)
-        .join('\n')} \n ${query}`;
-    }
-
-    return (response as HasuraInsertResp)[`insert_media_${table}_one`].title;
-  } catch (error) {
-    console.log(error);
-    throw `Adding record to Hasura - Media - ${table}: \n ${error}`;
-  }
-};
-
-/**
- * Update media entry to Hasura.
- * @function
- * @async
- *
- * @param {string} table
- * @param {string} id item id
- * @param {MediaItem} item data to update
- * @returns {Promise<string>}
- */
-export const updateMediaItem = async (
-  table: string,
-  id: string,
-  item: MediaItem
-): Promise<string> => {
-  const query = `
-    mutation {
-      update_media_${table}(
-        where: {id: {_eq: "${id}"}},
-        _set: { ${objToQueryString(item)} }
-      ) {
-        returning {
-          title
-        }
-      }
-    }
-  `;
-
-  try {
-    const request = await fetch(`${HASURA_ENDPOINT}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
-      },
-      body: JSON.stringify({ query }),
-    });
-    const response: HasuraUpdateResp | HasuraErrors = await request.json();
-
-    if (response.errors) {
-      const { errors } = response as HasuraErrors;
-
-      console.log(errors);
-      throw `Updating record to Hasura - Media - ${table}: \n ${errors
-        .map(err => `${err.extensions.path}: ${err.message}`)
-        .join('\n')} \n ${query}`;
-    }
-
-    return (response as HasuraUpdateResp)[`update_media_${table}`].returning[0]
-      .title;
-  } catch (error) {
-    console.log(error);
-    throw `Updating record to Hasura - Media - ${table}: \n ${error}`;
-  }
-};
-
-/**
  * Get media entries from Hasura.
  * @function
  * @async
@@ -225,5 +121,117 @@ export const searchMediaItems = async (
   } catch (error) {
     console.log(error);
     throw `Searching records from Hasura - Media - ${table}: \n ${error}`;
+  }
+};
+
+/**
+ * Add media entry to Hasura.
+ * @function
+ * @async
+ *
+ * @param {string} table
+ * @param {MediaItem} item data to upload
+ * @returns {Promise<string>}
+ */
+export const addMediaItem = async (
+  table: string,
+  item: MediaItem
+): Promise<string> => {
+  const query = `
+    mutation {
+      insert_media_${table}_one(object: { ${objToQueryString(item)} }) {
+        title
+      }
+    }
+  `;
+
+  try {
+    const existing = await searchMediaItems(table, item.title);
+
+    if (existing.length !== 0) {
+      console.log('addMediaItem', 'Media already exists.');
+
+      throw `Adding record to Hasura: Media already exists.`;
+    }
+
+    const request = await fetch(`${HASURA_ENDPOINT}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
+      },
+      body: JSON.stringify({ query }),
+    });
+    const response: HasuraInsertResp | HasuraErrors = await request.json();
+
+    if (response.errors) {
+      const { errors } = response as HasuraErrors;
+
+      console.log(errors);
+      throw `Adding record to Hasura - Media - ${table}: \n ${errors
+        .map(err => `${err.extensions.path}: ${err.message}`)
+        .join('\n')} \n ${query}`;
+    }
+
+    return (response as HasuraInsertResp)[`insert_media_${table}_one`].title;
+  } catch (error) {
+    console.log(error);
+    throw `Adding record to Hasura - Media - ${table}: \n ${error}`;
+  }
+};
+
+/**
+ * Update media entry to Hasura.
+ * @function
+ * @async
+ *
+ * @param {string} table
+ * @param {string} id item id
+ * @param {MediaItem} item data to update
+ * @returns {Promise<string>}
+ */
+export const updateMediaItem = async (
+  table: string,
+  id: string,
+  item: MediaItem
+): Promise<string> => {
+  const query = `
+    mutation {
+      update_media_${table}(
+        where: {id: {_eq: "${id}"}},
+        _set: { ${objToQueryString(item)} }
+      ) {
+        returning {
+          title
+        }
+      }
+    }
+  `;
+
+  try {
+    const request = await fetch(`${HASURA_ENDPOINT}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
+      },
+      body: JSON.stringify({ query }),
+    });
+    const response: HasuraUpdateResp | HasuraErrors = await request.json();
+
+    if (response.errors) {
+      const { errors } = response as HasuraErrors;
+
+      console.log(errors);
+      throw `Updating record to Hasura - Media - ${table}: \n ${errors
+        .map(err => `${err.extensions.path}: ${err.message}`)
+        .join('\n')} \n ${query}`;
+    }
+
+    return (response as HasuraUpdateResp)[`update_media_${table}`].returning[0]
+      .title;
+  } catch (error) {
+    console.log(error);
+    throw `Updating record to Hasura - Media - ${table}: \n ${error}`;
   }
 };
