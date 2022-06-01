@@ -24,8 +24,10 @@ export interface Video {
 export type MediaItem = Book | Game | Video;
 
 export interface HasuraInsertResp {
-  [key: string]: {
-    title: string;
+  data: {
+    [key: string]: {
+      title: string;
+    };
   };
 }
 
