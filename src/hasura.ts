@@ -146,7 +146,9 @@ export const addMediaItem = async (
   `;
 
   try {
+    console.log(item);
     const existing = await searchMediaItems(table, item.title);
+    console.log(existing);
 
     if (existing.length !== 0) {
       console.log('addMediaItem', 'Media already exists.');
@@ -172,7 +174,7 @@ export const addMediaItem = async (
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
-
+    console.log(response);
     return (response as HasuraInsertResp)[`insert_media_${table}_one`].title;
   } catch (error) {
     console.log(error);
