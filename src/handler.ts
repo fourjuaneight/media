@@ -1,7 +1,7 @@
-import { bookGenres, gameGenres, gamePlatforms, videoGenres } from './tags';
 import {
   addMediaItem,
   queryMediaItems,
+  queryTags,
   searchMediaItems,
   updateMediaItem,
 } from './hasura';
@@ -30,11 +30,28 @@ const noAuthReqBody = {
   ...responseInit,
 };
 // match tags list to array of tags
-const tagsList: { [key: string]: string[] } = {
-  bookGenres,
-  gameGenres,
-  gamePlatforms,
-  videoGenres,
+const tagsList: {
+  [key: string]: {
+    db: string;
+    type: string;
+  };
+} = {
+  bookGenres: {
+    db: 'genres',
+    type: 'book',
+  },
+  gameGenres: {
+    db: 'genres',
+    type: 'game',
+  },
+  gamePlatforms: {
+    db: 'platforms',
+    type: 'game',
+  },
+  videoGenres: {
+    db: 'genres',
+    type: 'video',
+  },
 };
 
 const missingData = (data: MediaItem | undefined): boolean => {
@@ -63,24 +80,26 @@ const missingData = (data: MediaItem | undefined): boolean => {
  * @returns {Promise<Response>} response
  */
 const handleAction = async (payload: RequestPayload): Promise<Response> => {
-  const { table, type } = payload;
+  const { table, tagList, type } = payload;
 
   try {
     // determine which type and method to use
     switch (true) {
-      case payload.type === 'Tags': {
-        const list = payload.tagList as string;
+      case type === 'Tags': {
+        const list = tagList as string;
+        const selectedTagList = tagsList[list];
+        const tags = await queryTags(selectedTagList.db, selectedTagList.type);
 
         return new Response(
           JSON.stringify({
-            tags: tagsList[list],
+            tags,
             table,
             location: list,
           }),
           responseInit
         );
       }
-      case payload.type === 'Insert':
+      case type === 'Insert':
         const insertData = payload.data as MediaItem;
         const saved = await addMediaItem(table, insertData);
 
@@ -93,7 +112,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
           responseInit
         );
         break;
-      case payload.type === 'Update':
+      case type === 'Update':
         const updateData = payload.data as MediaItem;
         const updated = await updateMediaItem(
           table,
@@ -110,7 +129,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
           responseInit
         );
         break;
-      case payload.type === 'Search':
+      case type === 'Search':
         const searchPattern = payload.query as string;
         const searchItems = await searchMediaItems(table, searchPattern);
 

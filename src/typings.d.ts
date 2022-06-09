@@ -47,7 +47,7 @@ export interface HasuraQueryResp {
 
 export interface HasuraQueryTagsResp {
   data: {
-    meta_tags: { name: string }[];
+    [key: string]: { name: string }[];
   };
 }
 

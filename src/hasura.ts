@@ -2,6 +2,7 @@ import {
   HasuraErrors,
   HasuraInsertResp,
   HasuraQueryResp,
+  HasuraQueryTagsResp,
   HasuraUpdateResp,
   MediaItem,
 } from './typings.d';
@@ -28,6 +29,57 @@ const objToQueryString = (obj: { [key: string]: any }) =>
 
     return `${key}: ${fmtValue}`;
   });
+
+/**
+ * Get bookmark tags from Hasura.
+ * @function
+ * @async
+ *
+ * @param {string} db
+ * @param {string} type
+ * @returns {Promise<RecordData[]>}
+ */
+export const queryTags = async (
+  db: string,
+  type: string
+): Promise<string[]> => {
+  const query = `
+    {
+      meta_${db}(where: {table: {_eq: "media"}, type: {_eq: "${type}"}}) {
+        name
+      }
+    }
+  `;
+
+  try {
+    const request = await fetch(`${HASURA_ENDPOINT}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
+      },
+      body: JSON.stringify({ query }),
+    });
+    const response: HasuraQueryTagsResp | HasuraErrors = await request.json();
+
+    if (response.errors) {
+      const { errors } = response as HasuraErrors;
+
+      throw `Querying tags from Hasura - ${table} - ${type}: \n ${errors
+        .map(err => `${err.extensions.path}: ${err.message}`)
+        .join('\n')} \n ${query}`;
+    }
+
+    const tags = (response as HasuraQueryTagsResp).data[`meta_${db}`].map(
+      tag => tag.name
+    );
+
+    return tags;
+  } catch (error) {
+    console.log('queryTags', error);
+    throw error;
+  }
+};
 
 /**
  * Get media entries from Hasura.
