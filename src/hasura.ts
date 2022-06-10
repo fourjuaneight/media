@@ -199,7 +199,7 @@ export const addMediaItem = async (
     const existing = await searchMediaItems(table, item.title);
 
     if (existing.length !== 0) {
-      throw `(addMediaItem): Adding record to Hasura: Media already exists.`;
+      throw `(addMediaItem): Media already exists.`;
     }
 
     const request = await fetch(`${HASURA_ENDPOINT}`, {
