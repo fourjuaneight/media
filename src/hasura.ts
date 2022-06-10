@@ -31,21 +31,21 @@ const objToQueryString = (obj: { [key: string]: any }) =>
   });
 
 /**
- * Get bookmark tags from Hasura.
+ * Get media tags from Hasura.
  * @function
  * @async
  *
  * @param {string} db
- * @param {string} type
+ * @param {string} table
  * @returns {Promise<RecordData[]>}
  */
 export const queryTags = async (
   db: string,
-  type: string
+  table: string
 ): Promise<string[]> => {
   const query = `
     {
-      meta_${db}(where: {table: {_eq: "media"}, type: {_eq: "${type}"}}) {
+      meta_${db}(where: {schema: {_eq: "media"}, table: {_eq: "${table}"}}) {
         name
       }
     }
@@ -65,7 +65,7 @@ export const queryTags = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `Querying tags from Hasura - ${table} - ${type}: \n ${errors
+      throw `(queryTags) - ${db} - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
@@ -76,7 +76,7 @@ export const queryTags = async (
 
     return tags;
   } catch (error) {
-    console.log('queryTags', error);
+    console.log(error);
     throw error;
   }
 };
@@ -162,7 +162,7 @@ export const searchMediaItems = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `Searching records from Hasura - Media - ${table}: \n ${errors
+      throw `(searchMediaItems) - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
@@ -199,7 +199,7 @@ export const addMediaItem = async (
     const existing = await searchMediaItems(table, item.title);
 
     if (existing.length !== 0) {
-      throw `Adding record to Hasura: Media already exists.`;
+      throw `(addMediaItem): Adding record to Hasura: Media already exists.`;
     }
 
     const request = await fetch(`${HASURA_ENDPOINT}`, {
@@ -215,7 +215,7 @@ export const addMediaItem = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `Adding record to Hasura - Media - ${table}: \n ${errors
+      throw `(addMediaItem) - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }
@@ -270,7 +270,7 @@ export const updateMediaItem = async (
     if (response.errors) {
       const { errors } = response as HasuraErrors;
 
-      throw `Updating record to Hasura - Media - ${table}: \n ${errors
+      throw `(updateMediaItem) - ${table}: \n ${errors
         .map(err => `${err.extensions.path}: ${err.message}`)
         .join('\n')} \n ${query}`;
     }

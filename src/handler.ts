@@ -80,42 +80,40 @@ const missingData = (data: MediaItem | undefined): boolean => {
  * @returns {Promise<Response>} response
  */
 const handleAction = async (payload: RequestPayload): Promise<Response> => {
-  const { table, tagList, type } = payload;
-
   try {
     // determine which type and method to use
     switch (true) {
-      case type === 'Tags': {
-        const list = tagList as string;
+      case payload.type === 'Tags': {
+        const list = payload.tagList as string;
         const selectedTagList = tagsList[list];
         const tags = await queryTags(selectedTagList.db, selectedTagList.type);
 
         return new Response(
           JSON.stringify({
             tags,
-            table,
+            table: payload.table,
             location: list,
           }),
           responseInit
         );
       }
-      case type === 'Insert':
+      case payload.type === 'Insert':
         const insertData = payload.data as MediaItem;
-        const saved = await addMediaItem(table, insertData);
+        const saved = await addMediaItem(payload.table, insertData);
 
         return new Response(
           JSON.stringify({
             saved,
-            table,
-            location: type,
+            table: payload.table,
+            location: payload.type,
           }),
           responseInit
         );
         break;
-      case type === 'Update':
+      case payload.type === 'Update':
         const updateData = payload.data as MediaItem;
         const updated = await updateMediaItem(
-          table,
+          payload.table,
           updateData.id as string,
           updateData
         );
@@ -123,31 +121,34 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
         return new Response(
           JSON.stringify({
             updated,
-            table,
-            location: type,
+            table: payload.table,
+            location: payload.type,
           }),
           responseInit
         );
         break;
-      case type === 'Search':
+      case payload.type === 'Search':
         const searchPattern = payload.query as string;
-        const searchItems = await searchMediaItems(table, searchPattern);
+        const searchItems = await searchMediaItems(
+          payload.table,
+          searchPattern
+        );
 
         return new Response(
           JSON.stringify({
             items: searchItems,
-            table,
+            table: payload.table,
           }),
           responseInit
         );
         break;
       default: {
-        const queryItems = await queryMediaItems(table);
+        const queryItems = await queryMediaItems(payload.table);
 
         return new Response(
           JSON.stringify({
             items: queryItems,
-            table,
+            table: payload.table,
           }),
           responseInit
         );
@@ -157,7 +158,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
   } catch (error) {
     console.log(error);
     return new Response(
-      JSON.stringify({ error, table, location: type }),
+      JSON.stringify({ error, table: payload.table, location: payload.type }),
       errReqBody
     );
   }
