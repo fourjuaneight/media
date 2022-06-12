@@ -94,6 +94,7 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
     {
       media_${table}(order_by: {title: asc}) {
         ${MEDIA_FIELDS[table].join('\n')}
+        id
       }
     }
   `;
@@ -144,6 +145,7 @@ export const searchMediaItems = async (
         where: {title: {_iregex: ".*${pattern}.*"}}
       ) {
         ${MEDIA_FIELDS[table].join('\n')}
+        id
       }
     }
   `;
