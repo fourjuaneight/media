@@ -45,7 +45,10 @@ export const queryTags = async (
 ): Promise<string[]> => {
   const query = `
     {
-      meta_${db}(where: {schema: {_eq: "media"}, table: {_eq: "${table}"}}) {
+      meta_${db}(
+        order_by: {name: asc},
+        where: {schema: {_eq: "media"}, table: {_eq: "${table}"}}
+      ) {
         name
       }
     }
