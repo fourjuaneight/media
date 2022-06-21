@@ -23,6 +23,19 @@ export interface Video {
 
 export type MediaItem = Book | Game | Video;
 
+export type CountColumn =
+  | 'author'
+  | 'director'
+  | 'genre'
+  | 'platform'
+  | 'studio';
+
+export type TableAggregate = 'books' | 'games' | 'movies' | 'shows';
+
+export interface RecordColumnAggregateCount {
+  [key: string]: number;
+}
+
 export interface HasuraInsertResp {
   data: {
     [key: string]: {
@@ -42,6 +55,14 @@ export interface HasuraUpdateResp {
 export interface HasuraQueryResp {
   data: {
     [key: string]: MediaItem[];
+  };
+}
+
+export interface HasuraQueryAggregateResp {
+  data: {
+    [key: string]: {
+      [key: string]: string;
+    }[];
   };
 }
 
@@ -67,4 +88,5 @@ export interface RequestPayload {
   tagList?: string;
   data?: MediaItem;
   query?: string;
+  countColumn?: CountColumn;
 }

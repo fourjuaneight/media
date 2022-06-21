@@ -1,10 +1,12 @@
 import {
   HasuraErrors,
   HasuraInsertResp,
+  HasuraQueryAggregateResp,
   HasuraQueryResp,
   HasuraQueryTagsResp,
   HasuraUpdateResp,
   MediaItem,
+  RecordColumnAggregateCount,
 } from './typings.d';
 
 const MEDIA_FIELDS = {
@@ -29,6 +31,22 @@ const objToQueryString = (obj: { [key: string]: any }) =>
 
     return `${key}: ${fmtValue}`;
   });
+
+const countUnique = (iterable: string[]) =>
+  iterable.reduce((acc: RecordColumnAggregateCount, item) => {
+    acc[item] = (acc[item] || 0) + 1;
+    return acc;
+  }, {});
+
+const countUniqueSorted = (iterable: string[]) =>
+  // sort descending by count
+  Object.entries(countUnique(iterable))
+    .sort((a, b) => b[1] - a[1])
+    .reduce(
+      (acc: RecordColumnAggregateCount, [key, val]) =>
+        ({ ...acc, [key]: val } as RecordColumnAggregateCount),
+      {}
+    );
 
 /**
  * Get media tags from Hasura.
@@ -122,6 +140,56 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
     }
 
     return (response as HasuraQueryResp).data[`media_${table}`];
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+/**
+ * Get aggregated count of media column from Hasura.
+ * @function
+ * @async
+ *
+ * @param {string} table
+ * @param {string} column
+ * @returns {Promise<RecordColumnAggregateCount>}
+ */
+export const queryMediaAggregateCount = async (
+  table: TableAggregate,
+  column: CountColumn
+): Promise<RecordColumnAggregateCount> => {
+  const query = `
+    {
+      media_${table}(order_by: {${column}: asc}) {
+        ${column}
+      }
+    }
+  `;
+
+  try {
+    const request = await fetch(`${HASURA_ENDPOINT}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Hasura-Admin-Secret': `${HASURA_ADMIN_SECRET}`,
+      },
+      body: JSON.stringify({ query }),
+    });
+    const response: any = await request.json();
+
+    if (response.errors) {
+      const { errors } = response as HasuraErrors;
+
+      throw `(queryMediaAggregateCount) - ${table}: \n ${errors
+        .map(err => `${err.extensions.path}: ${err.message}`)
+        .join('\n')} \n ${query}`;
+    }
+
+    const data = (response as HasuraQueryAggregateResp).data[`media_${table}`];
+    const collection = data.map(item => item[column]);
+
+    return countUniqueSorted(collection);
   } catch (error) {
     console.log(error);
     throw error;
