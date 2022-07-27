@@ -30,7 +30,7 @@ export type CountColumn =
   | 'platform'
   | 'studio';
 
-export type TableAggregate = 'books' | 'games' | 'movies' | 'shows';
+export type Tables = 'books' | 'games' | 'movies' | 'shows';
 
 export interface RecordColumnAggregateCount {
   [key: string]: number;
@@ -82,8 +82,10 @@ export interface HasuraErrors {
   }[];
 }
 
+export type Types = 'Tags' | 'Count' | 'Query' | 'Search' | 'Insert' | 'Update';
+
 export interface RequestPayload {
-  type: string;
+  type: Types;
   table: string;
   tagList?: string;
   data?: MediaItem;

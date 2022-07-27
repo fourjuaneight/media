@@ -7,6 +7,7 @@ import {
   HasuraUpdateResp,
   MediaItem,
   RecordColumnAggregateCount,
+  Tables,
 } from './typings.d';
 
 const MEDIA_FIELDS = {
@@ -54,12 +55,12 @@ const countUniqueSorted = (iterable: string[]) =>
  * @async
  *
  * @param {string} db
- * @param {string} table
+ * @param {Tables} table
  * @returns {Promise<RecordData[]>}
  */
 export const queryTags = async (
   db: string,
-  table: string
+  table: Tables
 ): Promise<string[]> => {
   const query = `
     {
@@ -107,10 +108,10 @@ export const queryTags = async (
  * @function
  * @async
  *
- * @param {string} table
+ * @param {Tables} table
  * @returns {Promise<MediaItem[]>}
  */
-export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
+export const queryMediaItems = async (table: Tables): Promise<MediaItem[]> => {
   const query = `
     {
       media_${table}(order_by: {title: asc}) {
@@ -151,12 +152,12 @@ export const queryMediaItems = async (table: string): Promise<MediaItem[]> => {
  * @function
  * @async
  *
- * @param {string} table
+ * @param {Tables} table
  * @param {string} column
  * @returns {Promise<RecordColumnAggregateCount>}
  */
 export const queryMediaAggregateCount = async (
-  table: TableAggregate,
+  table: Tables,
   column: CountColumn
 ): Promise<RecordColumnAggregateCount> => {
   const query = `
@@ -201,12 +202,12 @@ export const queryMediaAggregateCount = async (
  * @function
  * @async
  *
- * @param {string} table
+ * @param {Tables} table
  * @param {string} pattern media item title
  * @returns {Promise<MediaItem[]>}
  */
 export const searchMediaItems = async (
-  table: string,
+  table: Tables,
   pattern: string
 ): Promise<MediaItem[]> => {
   const query = `
@@ -252,12 +253,12 @@ export const searchMediaItems = async (
  * @function
  * @async
  *
- * @param {string} table
+ * @param {Tables} table
  * @param {MediaItem} item data to upload
  * @returns {Promise<string>}
  */
 export const addMediaItem = async (
-  table: string,
+  table: Tables,
   item: MediaItem
 ): Promise<string> => {
   const query = `
@@ -306,13 +307,13 @@ export const addMediaItem = async (
  * @function
  * @async
  *
- * @param {string} table
+ * @param {Tables} table
  * @param {string} id item id
  * @param {MediaItem} item data to update
  * @returns {Promise<string>}
  */
 export const updateMediaItem = async (
-  table: string,
+  table: Tables,
   id: string,
   item: MediaItem
 ): Promise<string> => {

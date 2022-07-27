@@ -7,12 +7,7 @@ import {
   updateMediaItem,
 } from './hasura';
 
-import {
-  RequestPayload,
-  MediaItem,
-  TableAggregate,
-  CountColumn,
-} from './typings.d';
+import { RequestPayload, MediaItem, CountColumn } from './typings.d';
 
 // default responses
 const responseInit = {
@@ -153,7 +148,7 @@ const handleAction = async (payload: RequestPayload): Promise<Response> => {
       }
       case payload.type === 'Count': {
         const queryResults = await queryMediaAggregateCount(
-          payload.table as TableAggregate,
+          payload.table,
           payload.countColumn as CountColumn
         );
 
