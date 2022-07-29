@@ -1,6 +1,6 @@
 {
   "name": "media",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Serverless functions to save and query media inventory from a Hasura database.",
   "main": "dist/worker.js",
   "scripts": {
